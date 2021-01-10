@@ -6,22 +6,26 @@
 ## 服务依赖定义
 
 服务依赖需要在 metadata.annotations.dependOn 声明依赖项(多个服务用逗号隔开) <br>
+
 如:
 
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-docs-backend
+  name: serviceA
   annotations:
-    dependOn: mariadb,etcd,redis,rabbitmq
+    dependOn: serviceB, serviceC
 spec:
   selector:
     matchLabels:
-      app: api-docs-backend
+      app: serviceA
 ...
 
 ```
+codeci deploy serviceA  进行部署 serviceA 的时候会检测 serviceB、C 是否正常启动，如果没有则先启动 serviceB、C 。
+
+
 
 
 

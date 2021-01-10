@@ -1,42 +1,24 @@
+/*
+Copyright © 2020 NAME HERE <EMAIL ADDRESS>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package main
 
 import (
-	"codeci/src"
-	"os"
-	// "log"
+	"codeci/cmd"
 )
 
 func main() {
-	runSuite()
+	cmd.Execute()
 }
-
-//run suite
-func runSuite() {
-	params := os.Args
-	num := len(params)
-	switch(num) {
-	case 2:
-		app := params[1]
-		src.DeployResourceByLayNodes(app, "true")
-		break
-	case 3:
-		app := params[1]
-		strictModel := params[2]
-		src.DeployResourceByLayNodes(app, strictModel)
-		break
-	}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
