@@ -1,14 +1,14 @@
 package src
 
 //run suite
-func RunSuiteWithCliModel(app, strictModel string) {
-	DeployResourceByLayNodes(app, strictModel)
+func RunSuiteWithCliModel(app, strictModel, configPath string) {
+	DeployResourceByLayNodes(app, strictModel, configPath)
 }
 
 
 //run suite
-func RunSuiteWithApiModel(app, strictModel string) {
-	DeployResourceByLayNodes(app, strictModel)
+func RunSuiteWithAnalyseModel(app, configPath string) {
+	AnalyseServiceDepOn(app, configPath)
 }
 
 

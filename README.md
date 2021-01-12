@@ -23,8 +23,46 @@ spec:
 ...
 
 ```
-codeci deploy serviceA  进行部署 serviceA 的时候会检测 serviceB、C 是否正常启动，如果没有则先启动 serviceB、C 。
+codeci deploy serviceA  进行部署 serviceA 的时候会检测 serviceB、C 是否正常启动，如果没有则先启动 serviceB、C
 
+
+## 使用
+
+1. 配置 run config
+
+```json
+{
+  "servicepath": "[service paths]",
+  "dbsrcname": "[database service name]",
+  "namespace": "[namespace]",
+  "dbuser": "[database user]",
+  "dbpasswd": "[database passwd]",
+  "dbname": "[database]",
+  "nocheck": [
+    "[no check service list]"
+  ],
+  "apprun": [
+    "nginx",
+  ]
+}
+```
+
+2. cli 命令
+
+部署服务
+```
+codeci deploy [service name]
+```
+
+删除服务
+```
+codeci del [service name]
+```
+
+分析服务
+```
+codeci analyze [service name]
+```
 
 
 

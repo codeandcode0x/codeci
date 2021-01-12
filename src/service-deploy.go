@@ -51,10 +51,8 @@ var appConfig Config
 var apps []string
 var apiClient k8s.K8sClientInf
 var checkLayNodes []appsv1.Deployment
+var configPath string
 
-const(
-	CONFIGPATH = "./run"
-)
 
 //init
 func init() {
@@ -74,8 +72,12 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+
+	//get home path
+	configPath, _ = GetHome()
+	configPath = configPath + "/.codeci"
 	//init config
-	initConfig()
+	initConfig(configPath)
 
 	apiClient = &k8s.K8sClient{
 		clientset,
@@ -84,13 +86,13 @@ func init() {
 }
 
 //init config
-func initConfig() {
+func initConfig(cfgPath string) {
 	noCheckNodes,appRunNodes = make(map[string]string, 0), make(map[string]string, 0)
-	deploycfgpath := filepath.Join(CONFIGPATH, "deployconfig.json")
+	deploycfgpath := filepath.Join(cfgPath, "deployconfig.json")
 	cfg, err := ioutil.ReadFile(deploycfgpath)
 	err = json.Unmarshal(cfg, &appConfig)
 	if err != nil {
-		log.Println("warnning: deployconfig file not exist in ./run ! ")
+		log.Println("warnning: deployconfig file not exist in "+ cfgPath +" ! ")
 		deploycfgpath = filepath.Join("./conf/dev", "deployconfig.json")
 		cfg, err = ioutil.ReadFile(deploycfgpath)
 		err = json.Unmarshal(cfg, &appConfig)
@@ -121,8 +123,13 @@ func initConfig() {
 	dbName = appConfig.DbName
 }
 
-//get all resource files
-func DeployResourceByLayNodes(app string, strictModel string) error {
+//deploy resource by layer nodes
+func DeployResourceByLayNodes(app, strictModel, cfgPath string) error {
+	//init config
+	if cfgPath != "" {
+		initConfig(cfgPath)
+	}
+	//layer nodes
 	var layNodes []map[string]*ResNode
 	//get app list
 	appList := []string{}
@@ -171,7 +178,7 @@ func DeployResourceByLayNodes(app string, strictModel string) error {
     return nil
 }
 
-//get all resource files
+//deploy all resource files
 func DeployAllResourceFiles(pathname string, resNode *ResNode) error {
     rd, err := ioutil.ReadDir(pathname)
     for _, fi := range rd {
@@ -250,6 +257,26 @@ func DeployResource(filePath string, resNode *ResNode) {
 	default:
 		break
 	}
+}
+
+//analyse service depend relation ship
+func AnalyseServiceDepOn(app, cfgPath string) {
+	//init config
+	if cfgPath != "" {
+		initConfig(cfgPath)
+	}
+	//layer nodes
+	var layNodes []map[string]*ResNode
+	//get app list
+	appList := []string{}
+	if app == "all" {
+		appList = apps
+	}else{
+		appList = append(appList, app)
+	}
+
+	layNodes = GenerateDependTreeByConfig(apiClient, servicePath, appList)
+	PrintlnRes(layNodes)
 }
 
 

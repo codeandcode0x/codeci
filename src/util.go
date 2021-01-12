@@ -12,7 +12,12 @@ import (
 	"time"
 	"fmt"
 	"os"
+	"os/user"
 	"codeci/src/k8s"
+	"runtime"
+	"bytes"
+	"errors"
+	"os/exec"
 )
 
 
@@ -158,12 +163,19 @@ func ReadDataFile(path string) []byte {
 
 //tools print
 func PrintlnRes(layerNodes []map[string]*ResNode) {
+	index := 0
 	for k,v := range layerNodes {
-		fmt.Println(k, ",", len(v))
+		fmt.Println("[ layer:", k+1, ",", "service num:", len(v), "]")
 		for _, subV := range v {
-			fmt.Print(subV.Name,",")
+			if index == 0 {
+				fmt.Print(subV.Name)
+			}else{
+				fmt.Print(", ", subV.Name)
+			}
+			index++
 		}
-		fmt.Println("")
+		fmt.Println("\n")
+		index = 0
 	}
 }
 
@@ -187,4 +199,68 @@ func PrintLog() {
 	//add logs
 }
 
+//get Home
+func GetHome() (string, error) {
+    user, err := user.Current()
+    if nil == err {
+        return user.HomeDir, nil
+    }
+
+    // cross compile support
+    if "windows" == runtime.GOOS {
+        return homeWindows()
+    }
+
+    // Unix-like system, so just assume Unix
+    return homeUnix()
+}
+
+func homeUnix() (string, error) {
+    // First prefer the HOME environmental variable
+    if home := os.Getenv("HOME"); home != "" {
+        return home, nil
+    }
+
+    // If that fails, try the shell
+    var stdout bytes.Buffer
+    cmd := exec.Command("sh", "-c", "eval echo ~$USER")
+    cmd.Stdout = &stdout
+    if err := cmd.Run(); err != nil {
+        return "", err
+    }
+
+    result := strings.TrimSpace(stdout.String())
+    if result == "" {
+        return "", errors.New("blank output when reading home directory")
+    }
+
+    return result, nil
+}
+
+func homeWindows() (string, error) {
+    drive := os.Getenv("HOMEDRIVE")
+    path := os.Getenv("HOMEPATH")
+    home := drive + path
+    if drive == "" || path == "" {
+        home = os.Getenv("USERPROFILE")
+    }
+    if home == "" {
+        return "", errors.New("HOMEDRIVE, HOMEPATH, and USERPROFILE are blank")
+    }
+
+    return home, nil
+}
+
+
+//file or folder check exists
+func FFExists(path string) bool {
+	_, err := os.Stat(path)
+	if err != nil {
+		if os.IsExist(err) {
+			return true
+		}
+		return false
+	}
+	return true
+}
 
