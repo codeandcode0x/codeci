@@ -55,7 +55,7 @@ var configPath string
 
 
 //init
-func init() {
+func initKubeConfig() {
 	var config *rest.Config
 	kubecfgpath := filepath.Join(os.Getenv("HOME"), ".kube", "config")
 	//kubeconfig
@@ -64,7 +64,7 @@ func init() {
 		kubecfgpath = filepath.Join("./run", "kubeconfig")
 		config, err = clientcmd.BuildConfigFromFlags("", kubecfgpath)
 		if err != nil {
-			panic(err)
+			panic("~/.codeci/config or ./kube/config are not exist ! \nyou can vim ~/.codeci/kubeconfig or vim ~/.kube/config")
 		}
 	}
 	//client set
@@ -125,6 +125,8 @@ func initConfig(cfgPath string) {
 
 //deploy resource by layer nodes
 func DeployResourceByLayNodes(app, strictModel, cfgPath string) error {
+	//init kube config
+	initKubeConfig()
 	//init config
 	if cfgPath != "" {
 		initConfig(cfgPath)

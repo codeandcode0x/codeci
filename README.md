@@ -5,7 +5,7 @@
 
 ## 服务依赖定义
 
-服务依赖需要在 metadata.annotations.dependOn 声明依赖项(多个服务用逗号隔开) <br>
+服务依赖需要在 **metadata.annotations.dependOn** 声明依赖项(多个服务用逗号隔开) <br>
 
 如:
 
@@ -25,26 +25,16 @@ spec:
 ```
 codeci deploy serviceA  进行部署 serviceA 的时候会检测 serviceB、C 是否正常启动，如果没有则先启动 serviceB、C
 
+## 安装
+
+```sh
+curl -fsSl http://codeandcode.cn/apps/codeci/install.sh | bash
+```
 
 ## 使用
-
-1. 配置 run config
-
-```json
-{
-  "servicepath": "[service paths]",
-  "dbsrcname": "[database service name]",
-  "namespace": "[namespace]",
-  "dbuser": "[database user]",
-  "dbpasswd": "[database passwd]",
-  "dbname": "[database]",
-  "nocheck": [
-    "[no check service list]"
-  ],
-  "apprun": [
-    "nginx",
-  ]
-}
+修改配置文件
+```sh
+vim ~/.codeci/deployconfig
 ```
 
 2. cli 命令
@@ -56,7 +46,7 @@ codeci deploy [service name]
 
 删除服务
 ```
-codeci del [service name]
+codeci reset [service name]
 ```
 
 分析服务

@@ -264,3 +264,23 @@ func FFExists(path string) bool {
 	return true
 }
 
+
+//catch
+func  Catch()  {
+    if r := recover(); r != nil {
+        fmt.Println("ERROR:", r)
+        var err error
+        switch x := r.(type) {
+        case string:
+            err = errors.New(x)
+        case error:
+            err = x
+        default:
+            err = errors.New("")
+        }
+        if err != nil {
+        }
+    }
+}
+
+
