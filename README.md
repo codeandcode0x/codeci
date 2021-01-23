@@ -28,7 +28,7 @@ codeci deploy serviceA  进行部署 serviceA 的时候会检测 serviceB、C �
 ## 安装
 
 ```sh
-curl -fsSl http://codeandcode.cn/apps/codeci/install.sh | bash
+curl -fsSl https://codeandcode.cn/apps/codeci/install.sh | bash
 ```
 
 ## 使用
