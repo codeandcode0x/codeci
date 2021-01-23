@@ -243,8 +243,8 @@ func DeployResource(filePath string, resNode *ResNode) {
 		//check pod
 		//检测是否在 no check 中
 		if _,exist := noCheckNodes[spec.Name]; !exist {
-			// CheckPodStatus(apiClient, spec)
-			checkLayNodes = append(checkLayNodes, spec)
+			CheckPodStatus(apiClient, spec)
+			// checkLayNodes = append(checkLayNodes, spec)
 		}
 		
 		break
