@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"errors"
 	"os/exec"
+	"path/filepath"
 )
 
 
@@ -72,7 +73,13 @@ func InitPodData(apiClient k8s.K8sClientInf, dataType string, namespace, path, p
 //get data init file map
 func GetDataInitFile() map[string]string {
 	dataInitFileMap := make(map[string]string, 0)
-	dataBytes := ReadDataFile("./run/data-init-status.json")
+	dataBytes := []byte{}
+	dataFilePath := filepath.Join(os.Getenv("HOME"), ".codeci", "data-init-status.json")
+	status := FileExist(dataFilePath)
+	if status {
+		dataBytes = ReadDataFile(dataFilePath)
+	}
+
 	json.Unmarshal(dataBytes, &dataInitFileMap)
 	return dataInitFileMap
 }

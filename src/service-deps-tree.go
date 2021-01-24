@@ -28,6 +28,7 @@ import (
 	"os"
 	"bufio"
 	"codeci/src/k8s"
+	"path/filepath"
 )
 
 //资源
@@ -371,9 +372,10 @@ func WriteDataStatusFile(dataInitFileMap map[string]string, writeOver bool) {
 	}else{
 		wStatus := true
 		//data status file whether exist
-		status := FileExist("./run/data-init-status.json")
+		dataFilePath := filepath.Join(os.Getenv("HOME"), ".codeci", "data-init-status.json")
+		status := FileExist(dataFilePath)
 		if status {
-			dataJson := ReadDataFile("./run/data-init-status.json")
+			dataJson := ReadDataFile(dataFilePath)
 		    if len(dataJson) >0 {
 		    	wStatus = false
 		    }
@@ -388,7 +390,8 @@ func WriteDataStatusFile(dataInitFileMap map[string]string, writeOver bool) {
 //write data file
 func WriteDataFile(dataInitFileMap map[string]string) {
 	//create file
-	dataFile, err := os.Create("./run/data-init-status.json")
+	dataFilePath := filepath.Join(os.Getenv("HOME"), ".codeci", "data-init-status.json")
+	dataFile, err := os.Create(dataFilePath)
 	if err != nil {
 		log.Fatalln("create sql status file failed!", err)
 	}

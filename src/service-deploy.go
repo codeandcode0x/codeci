@@ -57,14 +57,14 @@ var configPath string
 //init
 func initKubeConfig() {
 	var config *rest.Config
-	kubecfgpath := filepath.Join(os.Getenv("HOME"), ".kube", "config")
+	kubecfgpath := filepath.Join(os.Getenv("HOME"), ".codeci", "kubeconfig")
 	//kubeconfig
 	config, err := clientcmd.BuildConfigFromFlags("", kubecfgpath)
 	if err != nil {
-		kubecfgpath = filepath.Join("./run", "kubeconfig")
+		kubecfgpath = filepath.Join(os.Getenv("HOME"), ".kube", "config")
 		config, err = clientcmd.BuildConfigFromFlags("", kubecfgpath)
 		if err != nil {
-			panic("~/.codeci/config or ./kube/config are not exist ! \nyou can vim ~/.codeci/kubeconfig or vim ~/.kube/config")
+			panic("~/.codeci/kubeconfig or ./kube/config are not exist ! \nyou can vim ~/.codeci/kubeconfig or vim ~/.kube/config")
 		}
 	}
 	//client set
@@ -263,6 +263,8 @@ func DeployResource(filePath string, resNode *ResNode) {
 
 //analyse service depend relation ship
 func AnalyseServiceDepOn(app, cfgPath string) {
+	//init kube config
+	initKubeConfig()
 	//init config
 	if cfgPath != "" {
 		initConfig(cfgPath)
