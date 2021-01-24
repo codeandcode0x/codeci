@@ -41,18 +41,39 @@ vim ~/.codeci/deployconfig
 
 部署服务
 ```
-codeci deploy [service name]
+codeci deploy [service name] 
+
+or
+
+codeci deploy -s [service name] -c [deployconfig.json]
 ```
 
 删除服务
 ```
 codeci reset [service name]
+
+or
+
+codeci reset -s [service name] -c [deployconfig.json]
 ```
 
 分析服务
 ```
 codeci analyze [service name]
+
+or
+
+codeci analyze -s [service name] -c [deployconfig.json]
 ```
+
+3. 数据迁移
+
+codeci 会自动扫描 services 目录下的 sql 文件
+- init_db.sql 创建 db sql
+- schema.sql 创建表 sql
+- data/\*.sql 创建 data sql
+
+这些文件会自动执行，建议 DDL 写上 CREATE IF NOT EXISTS TABLES/DBS
 
 
 
