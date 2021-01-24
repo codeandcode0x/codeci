@@ -74,8 +74,7 @@ func initKubeConfig() {
 	}
 
 	//get home path
-	configPath, _ = GetHome()
-	configPath = configPath + "/.codeci"
+	configPath = filepath.Join(os.Getenv("HOME"), ".codeci", "deployconfig.json")
 	//init config
 	initConfig(configPath)
 
@@ -88,16 +87,16 @@ func initKubeConfig() {
 //init config
 func initConfig(cfgPath string) {
 	noCheckNodes,appRunNodes = make(map[string]string, 0), make(map[string]string, 0)
-	deploycfgpath := filepath.Join(cfgPath, "deployconfig.json")
+	deploycfgpath := cfgPath
 	cfg, err := ioutil.ReadFile(deploycfgpath)
 	err = json.Unmarshal(cfg, &appConfig)
 	if err != nil {
-		log.Println("warnning: deployconfig file not exist in "+ cfgPath +" ! ")
-		deploycfgpath = filepath.Join("./conf/dev", "deployconfig.json")
+		log.Println("warnning: file not exist "+ cfgPath +" ! ", err)
+		deploycfgpath = filepath.Join("./", "deployconfig.json")
 		cfg, err = ioutil.ReadFile(deploycfgpath)
 		err = json.Unmarshal(cfg, &appConfig)
 		if err != nil {
-			log.Println("error: deployconfig file not exist in ./conf ! ")
+			log.Println("error: deployconfig.json file not exist in ./ ! ")
 		}
 	}
 	//set env ns
