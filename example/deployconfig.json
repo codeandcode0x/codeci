@@ -1,0 +1,16 @@
+{
+    "servicepath": "./",
+    "dbsrcname": "mariadb",
+    "namespace": "default",
+    "dbuser": "root",
+    "dbpasswd": "root123",
+    "dbname": "ticket",
+    "nocheck": [
+      ""
+    ],
+    "apprun": [
+      "nginx",
+      "ticket-manager",
+      "mariadb"
+    ]
+  }

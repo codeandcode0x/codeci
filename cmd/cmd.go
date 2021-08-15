@@ -2,7 +2,7 @@ package cmd
 
 import (
     "github.com/spf13/cobra"
-    codeci "codeci/src"
+    codeci "codeci/pkg"
 )
 
 var apps, strictModel, configPath string
@@ -31,15 +31,17 @@ var codeciDeployCmd = &cobra.Command{
     Long: `deploy service`,
     Run: func(cmd *cobra.Command, args []string) {
         //TO-DO
-        if len(args) > 0 {
-            if len(args) == 1 {
-                codeci.RunSuiteWithCliModel(args[0], "true", configPath)
-            }else{
-                codeci.RunSuiteWithCliModel(args[0], args[1], configPath)
-            }
-        }else{
-            codeci.RunSuiteWithCliModel(apps, strictModel, configPath)
-        }
+        // if len(args) > 0 {
+        //     if len(args) == 1 {
+        //         codeci.RunSuiteWithCliModel(args[0], "true", configPath)
+        //     }else{
+        //         codeci.RunSuiteWithCliModel(args[0], args[1], configPath)
+        //     }
+        // }else{
+        //     codeci.RunSuiteWithCliModel(apps, strictModel, configPath)
+        // }
+        codeci.RunSuiteWithCliModel("all", "true", configPath)
+
     },
 }
 

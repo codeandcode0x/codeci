@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"os"
 	"os/user"
-	"codeci/src/k8s"
+	"codeci/pkg/k8s"
 	"runtime"
 	"bytes"
 	"errors"

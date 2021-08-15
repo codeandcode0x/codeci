@@ -30,7 +30,7 @@ import (
 	"encoding/json"
 	"strings"
 	"path"
-	"codeci/src/k8s"
+	"codeci/pkg/k8s"
 )
 
 type Config struct {

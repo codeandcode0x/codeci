@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    dependOn: mariadb
+  name: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        env:
+        - name: DB_HOST
+          value: mariadb
+        - name: DB_PORT
+          value : "3306"
+        - name: DB_USER
+          value: root
+        - name: DB_PASSWD
+          value: root123
+        - name: DB_DATABASE
+          value: ticket
+        - name: DB_LOGMODE
+          value: "true"
+        image: nginx
+        imagePullPolicy: Always
+        livenessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          tcpSocket:
+            port: 80
+          timeoutSeconds: 3
+          failureThreshold: 30
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          tcpSocket:
+            port: 80
+          timeoutSeconds: 3
+          failureThreshold: 30
+        resources:
+          limits:
+            cpu: 150m
+            memory: 680Mi
+          requests:
+            cpu: 50m
+            memory: 256Mi
+      enableServiceLinks: false
+...

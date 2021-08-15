@@ -27,7 +27,7 @@ import (
 	"encoding/json"
 	"os"
 	"bufio"
-	"codeci/src/k8s"
+	"codeci/pkg/k8s"
 	"path/filepath"
 )
 
